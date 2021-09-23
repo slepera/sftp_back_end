@@ -23,7 +23,6 @@ public class SFTPClient {
     public void PutFile(String path) throws IOException {
         SshClient client = SshClient.setUpDefaultClient();
         client.start();
-        System.out.println("prova commit");
         try (ClientSession session = client.connect(sftpApplicationConfiguration.getClient_username(), sftpApplicationConfiguration.getClient_host(), sftpApplicationConfiguration.getClient_port()).verify(1000).getSession()) {
             session.addPasswordIdentity(sftpApplicationConfiguration.getClient_password());
             session.auth().verify();
