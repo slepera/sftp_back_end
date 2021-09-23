@@ -22,6 +22,7 @@ public class SFTPServer {
     @PostConstruct
     public void SFTPServer() throws IOException
     {
+
         SshServer sshd = SshServer.setUpDefaultServer();
         sshd.setHost(sftpApplicationConfiguration.getServer_host());
         sshd.setPort(sftpApplicationConfiguration.getServer_port());
@@ -29,13 +30,11 @@ public class SFTPServer {
         //Path path2 = Paths.get("host.ser");
 
         sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(path));
-
-        sshd.setSubsystemFactories(Collections.singletonList(new SftpSubsystemFactory()));
+        SftpSubsystemFactory factory = new SftpSubsystemFactory();
+        factory.addSftpEventListener(new SFTPListener());
+        sshd.setSubsystemFactories(Collections.singletonList(factory));
         sshd.setPasswordAuthenticator((username, password, session) -> username.equals(sftpApplicationConfiguration.getServer_username()) && password.equals(sftpApplicationConfiguration.getServer_password()));
-        System.out.println(sftpApplicationConfiguration.getServer_host());
-        System.out.println(sftpApplicationConfiguration.getServer_port());
-        System.out.println(sftpApplicationConfiguration.getServer_username());
-        System.out.println(sftpApplicationConfiguration.getServer_password());
+
         //sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(path2));
         sshd.start();
     }

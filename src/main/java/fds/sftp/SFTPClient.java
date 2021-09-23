@@ -27,7 +27,7 @@ public class SFTPClient {
             session.addPasswordIdentity(sftpApplicationConfiguration.getClient_password());
             session.auth().verify();
             try (SftpClient sftp = DefaultSftpClientFactory.INSTANCE.createSftpClient(session)) {
-                OutputStream outputStream = sftp.write(path);
+                OutputStream outputStream = sftp.write("../ftp_server/"+path);
                 FileInputStream fileInputStream = new FileInputStream(new File(path));
                 int i;
                 while((i = fileInputStream.read())!=-1)
@@ -49,7 +49,7 @@ public class SFTPClient {
             session.auth().verify();
             try (SftpClient sftp = DefaultSftpClientFactory.INSTANCE.createSftpClient(session)) {
                 InputStream inputStream = sftp.read(path);
-                FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
+                FileOutputStream fileOutputStream = new FileOutputStream(new File("../ftp_client/"+path));
                 int i;
                 while((i = inputStream.read())!=-1)
                 {
